@@ -1,0 +1,113 @@
+openssl(rootDir, authorityName) ::= <
+# OpenSSL root CA configuration file.
+# Copy to `/root/ca/openssl.cnf`.
+
+[ ca ]
+# `man ca`
+default_ca = CA_<authorityName>
+
+[ CA_<authorityName> ]
+# Directory and file locations.
+dir               = <rootDir>/<authorityName>
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/issued
+database          = $dir/index.txt
+serial            = $dir/serial
+RANDFILE          = $dir/private/.rand
+
+# The <authorityName> key and <authorityName> certificate.
+private_key       = $dir/private/<authroityName>.key.pem
+certificate       = $dir/certs/<authorityName>.cert.pem
+
+# For certificate revocation lists.
+crlnumber         = $dir/crlnumber
+crl               = $dir/crl/<authorityName>.crl.pem
+crl_extensions    = crl_ext
+default_crl_days  = 30
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md        = sha256
+
+name_opt          = ca_default
+cert_opt          = ca_default
+default_days      = 375
+preserve          = no
+policy            = policy_<authorityName>
+
+[ policy_<authorityName> ]
+# The <authorityName> CA should only sign certificate requests that satisfy policy.
+# See the POLICY FORMAT section of `man ca`.
+<@formatPolicy()>
+
+[ req ]
+# Options for the `req` tool (`man req`).
+default_bits        = 2048
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+
+# SHA-1 is deprecated, so use SHA-2 instead.
+default_md          = sha256
+
+# Extension to add when the -x509 option is used.
+x509_extensions     = v3_<authorityName>_ca
+
+[ req_distinguished_name ]
+# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
+countryName                     = Country Name (2 letter code)
+stateOrProvinceName             = State or Province Name
+localityName                    = Locality Name
+0.organizationName              = Organization Name
+organizationalUnitName          = Organizational Unit Name
+commonName                      = Common Name
+emailAddress                    = Email Address
+
+# Optionally, specify some defaults.
+<@distinguishedNameDefaults()>
+countryName_default             = US
+stateOrProvinceName_default     = California
+localityName_default            = San Carlos
+0.organizationName_default      = Upstart
+organizationalUnitName_default  = <orgUnitName>
+emailAddress_default            =
+
+[ v3_<authorityName>_ca ]
+<@x509Extensions()>
+
+[ crl_ext ]
+# Extension for CRLs (`man x509v3_config`).
+authorityKeyIdentifier=keyid:always
+
+[ ocsp ]
+# Extension for OCSP signing certificates (`man ocsp`).
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, OCSPSigning
+>>
+
+policy_strict() ::= <<
+# The root CA should only sign intermediate certificates that match.
+# See the POLICY FORMAT section of `man ca`.
+countryName             = match
+stateOrProvinceName     = match
+organizationName        = match
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+>>
+
+policy_loose() ::= <<
+# Allow the intermediate CA to sign a more diverse range of certificates.
+# See the POLICY FORMAT section of the `ca` man page.
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+>>
+
+

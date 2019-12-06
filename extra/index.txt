@@ -1,0 +1,1 @@
+V	290425231326Z		1000	unknown	/C=US/ST=California/L=San Carlos/O=Upstart/OU=Upstart InfoSec/CN=Upstart Root CA/emailAddress=infosec@upstart.com

@@ -1,0 +1,2 @@
+V	240831115445Z		1000	unknown	/C=US/ST=California/O=Upstart/OU=Data Engineering/CN=Client Certificate Authority/emailAddress=pbu@upstart.com
+V	240831115510Z		1001	unknown	/C=US/ST=California/O=Upstart/OU=Data Engineering/CN=Server Deployment Authority/emailAddress=devops@upstart.com

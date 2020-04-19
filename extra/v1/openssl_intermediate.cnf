@@ -28,8 +28,8 @@ default_crl_days  = 30
 # SHA-1 is deprecated, so use SHA-2 instead.
 default_md        = sha256
 
-name_opt          = ca_default
-cert_opt          = ca_default
+name_opt          = inter_default
+cert_opt          = inter_default
 default_days      = 375
 preserve          = no
 policy            = policy_loose

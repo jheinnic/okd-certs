@@ -1,32 +1,26 @@
 #!/bin/bash
 
-if ! CURRENT_DIR="$(pwd)"
+if ! INSTALL_DIR="$(dirname $(dirname $(realpath "${0}")))"
 then
-	echo "Cannot find present working directory?"
-	exit -1
+        echo "Cannot locate installation dir relative to ${0}"
+        exit -2
 fi
 
-if ! INSTALL_DIR="$(dirname ${CURRENT_DIR}/$0)/.."
-then
-	echo "Cannot locate installation dir relative to ${0}"
-	exit -2
-fi
-echo $(node -p "require('path').normalize('${INSTALL_DIR}')")
-INSTALL_DIR=$(node -p "require('path').normalize('${INSTALL_DIR}')")
+BIN_DIR="${INSTALL_DIR}/bin"
 
-"${INSTALL_DIR}/bin/genStructure.sh" rootCA
-"${INSTALL_DIR}/bin/genStructure.sh" intermediateCA
-"${INSTALL_DIR}/bin/genStructure.sh" clientsCA
-"${INSTALL_DIR}/bin/genStructure.sh" serversCA
+"${BIN_DIR}/genStructure.sh" rootCA
+"${BIN_DIR}/genStructure.sh" intermediateCA
+"${BIN_DIR}/genStructure.sh" clientsCA
+"${BIN_DIR}/genStructure.sh" serversCA
 
-"${INSTALL_DIR}/bin/genKey.sh" rootCA
-"${INSTALL_DIR}/bin/genRootCert.sh"
+# "${BIN_DIR}/genKey.sh" rootCA 4096
+"${BIN_DIR}/genRootCert.sh"
 
-"${INSTALL_DIR}/bin/genKey.sh" intermediateCA
-"${INSTALL_DIR}/bin/genIntermediateCert.sh" rootCA intermediateCA
+"${BIN_DIR}/genKey.sh" intermediateCA
+"${BIN_DIR}/genIntermediateCert.sh" rootCA intermediateCA
 
-"${INSTALL_DIR}/bin/genKey.sh" clientsCA
-"${INSTALL_DIR}/bin/genIntermediateCert.sh" intermediateCA clientsCA
+"${BIN_DIR}/genKey.sh" clientsCA
+"${BIN_DIR}/genIntermediateCert.sh" intermediateCA clientsCA
 
-"${INSTALL_DIR}/bin/genKey.sh" serversCA
-"${INSTALL_DIR}/bin/genIntermediateCert.sh" intermediateCA serversCA
+"${BIN_DIR}/genKey.sh" serversCA
+"${BIN_DIR}/genIntermediateCert.sh" intermediateCA serversCA

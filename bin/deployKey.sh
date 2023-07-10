@@ -34,11 +34,13 @@ mkdir "${SIGNED_DIR}/csr"
 openssl genrsa -out "${SIGNED_DIR}/private/ca.key.pem" 2048
 chmod 400 "${SIGNED_DIR}/private/ca.key.pem"
 
+# TODO: Should be a "${SIGNED_DIR}/openssl.cnf" config to set server's subject
 openssl req -new -sha256 \
       -config "${SIGNER_DIR}/openssl.cnf" \
       -key "${SIGNED_DIR}/private/ca.key.pem" \
       -out "${SIGNED_DIR}/csr/ca.csr.pem"
 
+# TODO: SHould be an external extension config to set altSubjectNames correctly
 openssl ca -config "${SIGNER_DIR}/openssl.cnf" \
       -extensions server_cert \
       -days ${DAYS_SIGNED} -notext -md sha256 \

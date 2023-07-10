@@ -17,10 +17,10 @@ BIN_DIR="${INSTALL_DIR}/bin"
 "${BIN_DIR}/genRootCert.sh"
 
 "${BIN_DIR}/genKey.sh" intermediateCA
-"${BIN_DIR}/genIntermediateCert.sh" rootCA intermediateCA
+"${BIN_DIR}/genChainedCert.sh" rootCA intermediateCA
 
 "${BIN_DIR}/genKey.sh" clientsCA
-"${BIN_DIR}/genIntermediateCert.sh" intermediateCA clientsCA
+"${BIN_DIR}/genChainedCert.sh" intermediateCA clientsCA
 
 "${BIN_DIR}/genKey.sh" serversCA
-"${BIN_DIR}/genIntermediateCert.sh" intermediateCA serversCA
+"${BIN_DIR}/genChainedCert.sh" intermediateCA serversCA

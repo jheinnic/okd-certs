@@ -126,13 +126,16 @@ commonName              = CSD Root CA
 [ca_ext]
 # Extensions for a typical CA (`man x509v3_config`).
 subjectKeyIdentifier = hash
+authorityInfoAccess = @issuer_info
+authorityKeyIdentifier = keyid:always
 basicConstraints = critical,CA:true
 keyUsage = critical,keyCertSign,cRLSign
 
 [intermediate_ext]
 # Extensions for a typical intermediate CA (`man x509v3_config`).
+subjectKeyIdentifier = hash
 authorityInfoAccess = @issuer_info
-authorityKeyIdentifier = keyid:always
+authorityKeyIdentifier = keyid,issuer:always
 basicConstraints = critical,CA:true,pathlen:0
 crlDistributionPoints = @crl_info
 keyUsage = critical,keyCertSign,cRLSIgn

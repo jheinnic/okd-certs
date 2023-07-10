@@ -1,0 +1,1 @@
+openssl req -x509 -config openssl.cnf -sha256 -days 3560 -nodes -newkey rsa:2048 -subj "/CN=RootCA/O=Thermo-Fisher Scientific/OU=Clinical Sequencing Division/C=US/L=San Francisco" -keyout rootCA.key -out rootCA.crt

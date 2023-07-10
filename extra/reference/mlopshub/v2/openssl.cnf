@@ -1,0 +1,223 @@
+# OpenSSL root CA configuration file.
+# Copy to `/root/ca/openssl.cnf`.
+
+oid_section                     = new_oids
+
+[new_oids]
+tsa_policy1                     = 1.2.3.4.1
+tsa_policy2                     = 1.2.3.4.5.6
+tsa_policy3                     = 1.2.3.4.5.7
+
+[default]
+name              = root-ca
+domain_suffix     = example.com
+aia_url           = http://$name.$domain_suffix/$name.crt
+crl_url           = http://$name.$domain_suffix/$name.crl
+ocsp_url          = http://ocsp.$name.$domain_suffix:9080
+default_ca        = ca_default
+# name_opt          = utf8,esc_ctrl,multiline,lname,align
+
+[ca]
+# `man ca`
+default_ca        = ca_default
+
+[ca_default]
+# Directory and file locations.
+name              = foo@example.com
+dir               = /home/ionadmin/Git/JchPtf/Certs/okd-certs-experimental/authorities/rootCA
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+RANDFILE          = $dir/private/.rand
+# The root key and root certificate.
+private_key       = $dir/private/ca.key.pem
+certificate       = $dir/certs/ca.cert.pem
+# For certificate revocation lists.
+crl               = $dir/crl/ca.crl.pem
+crlnumber         = $dir/crlnumber
+crl_extensions    = crl_ext
+unique_subject    = no
+copy_extensions   = none
+default_md        = sha256
+default_days      = 7300
+default_crl_days  = 30
+preserve          = no
+policy            = policy_c_o_match
+name_opt          = utf8,esc_ctrl,multiline,lname,align
+# cert_opt          = ca_default
+
+[req]
+# Options for the `req` tool (`man req`).
+default_bits        = 4096
+default_md          = sha256
+encrypt_key         = yes
+prompt              = no
+utf8                = yes
+string_mask         = utf8only
+distinguished_name  = ca_dn
+# Extensions to add when creating a CSR file
+req_extensions      = ca_ext
+# Extensions to add when the -x509 self-signing option is used.
+x509_extensions     = ca_ext
+
+[policy_c_o_match]
+# The root CA should only sign intermediate certificates that match.
+# See the POLICY FORMAT section of `man ca`.
+countryName             = match
+stateOrProvinceName     = match
+localityName            = optional
+organizationName        = match
+organizationalUnitName  = supplied
+commonName              = supplied
+emailAddress            = supplied
+
+[policy_delegate]
+# The intermediate CA should only sign delegate certificates that match.
+# See the POLICY FORMAT section of `man ca`.
+countryName             = supplied
+stateOrProvinceName     = supplied
+localityName            = optional
+organizationName        = match
+organizationalUnitName  = supplied
+commonName              = supplied
+emailAddress            = optional
+
+[policy_loose]
+# Allow the intermediate CA to sign a more diverse range of certificates.
+# See the POLICY FORMAT section of the `ca` man page.
+countryName             = supplied
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = supplied
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+[ca_dn]
+# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
+# Use these only when prompt=yes
+# countryName                     = Country (2 letter code)
+# stateOrProvinceName             = State or Province Name
+# localityName                    = Locality Name
+# 0.organizationName              = Organization Name
+# organizationalUnitName          = Organizational Unit Name
+# commonName                      = Common Name
+# emailAddress                    = Email Address
+#
+# Optionally, specify some defaults.
+# countryName_default             = US
+# stateOrProvinceName_default     = Massachusetts
+# localityName_default            = 
+# 0.organizationName_default      = Thermo Fisher Scientific, Inc.
+# organizationalUnitName_default  = Clinical Sequencing Division
+# emailAddress_default            = LSGSSFUNIXSupport@thermofisher.com
+# commonName_default              = CSD Root CA
+
+# Use this form when prompt=no
+countryName             = US
+stateOrProvinceName     = Massachusetts
+organizationName        = Thermo Fisher Scientific, Inc.
+organizationalUnitName  = Clinical Sequencing Division
+emailAddress            = LSGSSFUNIXSupport@thermofisher.com
+commonName              = CSD Root CA
+
+[ca_ext]
+# Extensions for a typical CA (`man x509v3_config`).
+subjectKeyIdentifier = hash
+authorityInfoAccess = @issuer_info
+authorityKeyIdentifier = keyid:always
+basicConstraints = critical,CA:true
+keyUsage = critical,keyCertSign,cRLSign
+
+[intermediate_ext]
+# Extensions for a typical intermediate CA (`man x509v3_config`).
+subjectKeyIdentifier = hash
+authorityInfoAccess = @issuer_info
+authorityKeyIdentifier = keyid,issuer:always
+basicConstraints = critical,CA:true,pathlen:0
+crlDistributionPoints = @crl_info
+keyUsage = critical,keyCertSign,cRLSIgn
+extendedKeyUsage = clientAuth,serverAuth
+nameConstraints = @name_constraints
+subjectKeyIdentifier = hash
+
+[crl_info]
+URI.0                   = $crl_url
+
+[issuer_info]
+caIssuers;URI.0         = $aia_url
+OCSP;URI.0              = $ocsp_url
+
+[name_constraints]
+permitted;DNS.0=example.com
+permitted;DNS.1=example.org
+excluded;IP.0=0.0.0.0/0.0.0.0
+excluded;IP.1=0:0:0:0:0:0:0:0/0:0:0:0:0:0:0:0
+
+[client_cert_ext]
+# Extensions for client certificates (`man x509v3_config`).
+authorityKeyIdentifier = keyid,issuer:always
+basicConstraints = CA:false
+nsCertType = client,email
+nsComment = "OpenSSL Generated Client Certificate"
+keyUsage = critical,nonRepudiation,digitalSignature,keyEncipherment
+extendedKeyUsage = clientAuth,emailProtection
+nameConstraints = @name_constraints
+subjectKeyIdentifier = hash
+
+[server_cert_ext]
+# Extensions for server certificates (`man x509v3_config`).
+authorityKeyIdentifier = keyid,issuer:always
+basicConstraints = CA:false
+nsCertType = server
+nsComment = "OpenSSL Generated Server Certificate"
+keyUsage = critical,digitalSignature,keyEncipherment
+extendedKeyUsage = serverAuth
+nameConstraints = @name_constraints
+subjectKeyIdentifier = hash
+
+[crl_ext]
+# Extension for CRLs (`man x509v3_config`).
+authorityKeyIdentifier=keyid:always
+
+[ocsp_ext]
+# Extension for OCSP signing certificates (`man ocsp`).
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical,CA:false
+keyUsage = critical,digitalSignature
+extendedKeyUsage = OCSPSigning
+subjectKeyIdentifier = hash
+
+### TSA Extension ###
+
+[tsa]
+default_tsa             = tsa_config1
+
+[tsa_config1]                         
+# TSA root directory, same as root-ca
+dir                     = /home/ionadmin/Git/JchPtf/Certs/okd-certs-experimental/authorities/rootCA
+serial                  = $dir/tsa_serial       # current serial number (mandatory)
+signer_cert             = $dir/tsa.crt          # signing certificate (optional)
+certs                   = $dir/tsa-chain.pem    # certification chain (optional)
+signer_key              = $dir/private/tsa.key  # tsa private key (optional)
+default_policy          = tsa_policy1
+signer_digest           = sha256                # digest to use for signing (optional)
+#other_policies         = tsa_policy2,tsa_policy3 # other policies (optional)
+digests                 = sha256,sha384,sha512    # acceptable digests (mandatory)
+accuracy                = secs:1,millisecs:500,microsecs:100 # accuracy optional
+ordering                = yes                   # is ordering defined? (optional, default: no)
+tsa_name                = yes                   # must tsa name be included in reply? (opt., default: no)
+ess_cert_id_chain       = yes                   # must ess cert id change be incl? (opt., default: no)
+ess_cert_id_alg         = sha256                # alg to compute cert. id (optional, default: sha1)
+
+# The tsa_ext extension is
+# used to create the tsa cert tsa.crt
+[tsa_ext]
+authorityKeyIdentifier  = keyid:always
+basicConstraints        = critical,CA:false
+extendedKeyUsage        = critical,timeStamping
+keyUsage                = critical,nonRepudiation
+subjectKeyIdentifier    = hash
+

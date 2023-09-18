@@ -1,5 +1,3 @@
-V	290830115359Z		1000	unknown	/C=US/ST=California/O=Upstart/OU=Data Engineering/CN=Intermediate Authority/emailAddress=support@upstart.com
-V	330614191457Z		1002	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=CSD Intermediate CA/emailAddress=LSGSSFUNIXSupport@thermofisher.com
-V	430614070803Z		1003	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=Root CA/emailAddress=LSGSSFUNIXSupport@thermofisher.com
+V	430614070803Z		1003	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=CSD Root CA/emailAddress=LSGSSFUNIXSupport@thermofisher.com
 V	430614070824Z		1004	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=CSD Root CA/emailAddress=LSGSSFUNIXSupport@thermofisher.com
-V	430614075648Z		1005	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=*.ha-us.dso.thermofisher.net/emailAddress=LSGSSFUNIXSupport@thermofisher.com
+V	430614075648Z		1005	unknown	/C=US/ST=Massachusetts/O=Thermo Fisher Scientific, Inc./OU=Clinical Sequencing Division/CN=CSD Root CA/emailAddress=LSGSSFUNIXSupport@thermofisher.com

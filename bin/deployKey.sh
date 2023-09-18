@@ -31,28 +31,28 @@ mkdir "${SIGNED_DIR}/certs"
 mkdir "${SIGNED_DIR}/private"
 mkdir "${SIGNED_DIR}/csr"
 
-openssl genrsa -out "${SIGNED_DIR}/private/ca.key.pem" 2048
-chmod 400 "${SIGNED_DIR}/private/ca.key.pem"
+openssl genrsa -out "${SIGNED_DIR}/private/ca.key.pem" -nodes 2048
+chmod 400 "${SIGNED_DIR}/private/key.pem"
 
-# TODO: Should be a "${SIGNED_DIR}/openssl.cnf" config to set server's subject
-openssl req -new -sha256 \
-      -config "${SIGNER_DIR}/openssl.cnf" \
-      -key "${SIGNED_DIR}/private/ca.key.pem" \
-      -out "${SIGNED_DIR}/csr/ca.csr.pem"
+# TODO: Confirm no extensions specified here
+openssl req -new -sha256 -nodes \
+      -config "${SIGNED_DIR}/openssl.cnf" \
+      -key "${SIGNED_DIR}/private/key.pem" \
+      -out "${SIGNED_DIR}/csr/csr.pem"
 
-# TODO: SHould be an external extension config to set altSubjectNames correctly
+# TODO: Should be an external extension config to set altSubjectNames correctly
 openssl ca -config "${SIGNER_DIR}/openssl.cnf" \
       -extensions server_cert \
       -days ${DAYS_SIGNED} -notext -md sha256 \
-      -in "${SIGNED_DIR}/csr/ca.csr.pem" \
-      -out "${SIGNED_DIR}/certs/ca.cert.pem"
+      -in "${SIGNED_DIR}/csr/csr.pem" \
+      -out "${SIGNED_DIR}/certs/cert.pem"
 
-chmod 644 "${SIGNED_DIR}/certs/ca.cert.pem"
+chmod 644 "${SIGNED_DIR}/certs/cert.pem"
 
-openssl x509 -noout -text -in "${SIGNED_DIR}/certs/ca.cert.pem"
+openssl x509 -noout -text -in "${SIGNED_DIR}/certs/cert.pem"
 
 cat     "${SIGNER_DIR}/certs/ca.cert.pem" \
 	"${SIGNER_DIR}/certs/ca-chain.cert.pem" > \
-	"${SIGNED_DIR}/certs/ca-chain.cert.pem"
+	"${SIGNED_DIR}/certs/cert-chain.pem"
 
-chmod 644 "${SIGNED_DIR}/certs/ca-chain.cert.pem"
+chmod 644 "${SIGNED_DIR}/certs/cert-chain.pem"

@@ -13,7 +13,7 @@ then
 	exit -3
 fi
 
-KEYSIZE="${2:-2048}"
+KEY_SIZE="${2:-2048}"
 
 openssl genrsa -out "${AUTH_DIR}/private/ca.key.pem" "${KEY_SIZE}" 
 chmod 400 "${AUTH_DIR}/private/ca.key.pem"

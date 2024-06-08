@@ -4,3 +4,4 @@ V	240909203851Z		1003	unknown	/C=US/ST=California/O=Upstart/OU=Data Engineering/
 V	240909204054Z		1004	unknown	/C=US/ST=California/L=San Francisco/O=Sparxo/OU=Data Engineering/CN=*.sparxo.com
 V	240909214627Z		1005	unknown	/C=US/ST=California/L=San Francisco/CN=*.sparxo.com
 V	240909214949Z		1006	unknown	/C=US/ST=California/L=San Francisco/CN=192.168.5.40
+V	250917175440Z		1007	unknown	/C=US/ST=CA/L=South San Francisco/O=ThermoFisher Scientific/OU=Clinical Sequencing Division/CN=ec2-54-88-109-203.compute-1.amazonaws.com

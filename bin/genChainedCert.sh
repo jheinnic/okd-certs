@@ -34,8 +34,8 @@ openssl ca -config "${SIGNER_DIR}/openssl.cnf" \
       -extensions v3_intermediate_ca \
       -days ${DAYS_SIGNED} -notext -md sha256 \
       -in "${SIGNED_DIR}/csr/ca.csr.pem" \
-      -keyfile "${SIGNED_DIR}/private/ca.key.pem" \
       -out "${SIGNED_DIR}/certs/ca.cert.pem"
+      # -keyfile "${SIGNED_DIR}/private/ca.key.pem" \
 
 chmod 644 "${SIGNED_DIR}/certs/ca.cert.pem"
 

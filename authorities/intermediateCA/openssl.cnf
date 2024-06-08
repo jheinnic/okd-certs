@@ -32,6 +32,7 @@ name_opt          = ca_default
 cert_opt          = ca_default
 default_days      = 375
 preserve          = no
+unique_subject    = no
 policy            = policy_delegate
 
 [ policy_strict ]

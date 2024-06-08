@@ -17,9 +17,10 @@ encrypt_key         = no
 countryName                     = US
 stateOrProvinceName             = CA
 localityName                    = South San Francisco
-organizationName                = Thermo-Fisher Scientific
+organizationName                = Thermo Fisher Scientific, Inc.
 organizationalUnitName          = Clinical Sequencing Division
-commonName                      = ec2-54-88-109-203.compute-1.amazonaws.com
+# commonName                      = ec2-54-88-109-203.compute-1.amazonaws.com
+commonName                      = app1.uat.ionreporter.thermofisher.com
 
 [prompt_distinguished_name]
 countryName                     = Country Name (2 letter code)

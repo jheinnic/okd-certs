@@ -1,0 +1,19 @@
+[ req ]
+default_bits = 4096
+prompt = no
+default_md = sha256
+req_extensions = req_ext
+distinguished_name = dn
+
+[ dn ]
+C = US
+ST = California
+L = San Francisco
+CN = 192.168.5.40
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = 192.168.5.40
+IP.1 = 192.168.5.40
